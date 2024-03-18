@@ -6,8 +6,8 @@ int main() {
         perror("failed to open index.html");
         exit(EXIT_FAILURE);
     }
-    char res_data[RESPONSE_LENGTH];
-    fread(res_data, sizeof(char), RESPONSE_LENGTH, html_data);
+    char res_data[SERVER_RESPONSE_LENGTH];
+    fread(res_data, sizeof(char), SERVER_RESPONSE_LENGTH, html_data);
     char http_header[HTTP_HEADER_LENGTH] = "HTTP/1.1 200 OK\r\n\n";
     strcat(http_header, res_data);
 

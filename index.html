@@ -6,6 +6,19 @@
     <title>C Web Server</title>
 </head>
 <body>
-    <h1>Hello World!</h1>
+    <h1>Welcome to the directory</h1>
+    <ul>
+        <li>
+            <a href="/template/windows.html">windows</a>
+        </li>
+        <li>
+            <a href="/template/linux.html">linux</a>
+        </li>
+    </ul>
+    <form action="/index.html">
+        <label for="filename">Name of new file:</label>
+        <input type="text" name="filename" placeholder="test.txt">
+        <input type="submit" value="add file">
+    </form>
 </body>
 </html>
