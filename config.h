@@ -20,8 +20,8 @@ typedef struct {
 } file_arr;
 
 // handles the request from the client
-void handle_request(int client_socket);
+void handle_request(int client_socket, file_arr *files);
 // render html and store as string data
-void render_html(char *res_data, char *method, char* path);
+void render_html(char *res_data, char *method, char* path, file_arr *files);
 // render index.html with dynamic content
-void render_index(char *res_data);
+void render_index(char *res_data, file_arr *files);
