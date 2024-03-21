@@ -161,7 +161,6 @@ void render_file(char *res_data, char *sub_path) {
 
     char path[PATH_LENGTH];
     substring(sub_path, path, 1);
-    fprintf(stderr, "path: %s\n", path);
     strcat(res_data, file_hd_buff);
     strcat(res_data, path);
     strcat(res_data, file_ft_buff);
