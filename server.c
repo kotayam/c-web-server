@@ -1,8 +1,5 @@
 #include "config.h"
 
-// get substring of string
-char *substring(char *str, int begIdx);
-
 int main() {
     int server_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (server_socket < 0) {
@@ -156,12 +153,19 @@ void render_file(char *res_data, char *sub_path) {
     FILE* file_hd_data = fopen("./template/file-head.html", "r");
     size_t fhd_size = fread(file_hd_buff, sizeof(char), SERVER_RESPONSE_DATA_LENGTH - 1, file_hd_data);
     file_hd_buff[fhd_size] = '\0';
+
     char file_ft_buff[SERVER_RESPONSE_DATA_LENGTH];
     FILE* file_ft_data = fopen("./template/file-foot.html", "r");
     size_t fft_size = fread(file_ft_buff, sizeof(char), SERVER_RESPONSE_DATA_LENGTH - 1, file_ft_data);
     file_ft_buff[fft_size] = '\0';
+
+    char path[PATH_LENGTH];
+    substring(sub_path, path, 1);
+    fprintf(stderr, "path: %s\n", path);
     strcat(res_data, file_hd_buff);
+    strcat(res_data, path);
     strcat(res_data, file_ft_buff);
+
     fclose(file_hd_data);
     fclose(file_ft_data);
 }
