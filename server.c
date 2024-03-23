@@ -45,38 +45,29 @@ int main() {
 
 void handle_request(int client_socket, file_arr *files) {
     FILE *client_file = fdopen(client_socket, "r");
+
     char client_request[CLIENT_REQUEST_LENGTH];
-    if (fgets(client_request, CLIENT_REQUEST_LENGTH - 1, client_file) == 0) {
+    if ((fgets(client_request, CLIENT_REQUEST_LENGTH - 1, client_file)) == 0) {
         perror("failed to read request from client");
         exit(EXIT_FAILURE);
     }
-    // fprintf(stderr, "request from client:\n%s\n", client_request);
     char *delimeter = " \n\r\t";
     char *method = strtok(client_request, delimeter);
     char *path = strtok(NULL, delimeter);
-    char *response = calloc(SERVER_RESPONSE_LENGTH, sizeof(char));
-    strcpy(response, "HTTP/1.1 200 OK\r\n\n");
+    char response[SERVER_RESPONSE_LENGTH] = "HTTP/1.1 200 OK\r\n\n";
     if (strcmp(path, "/favicon.ico") == 0) {
-        free(response);
         fclose(client_file);
         return;
     }
     else {
-        char *res_data = calloc(SERVER_RESPONSE_DATA_LENGTH, sizeof(char));
-        if (res_data == NULL) {
-            perror("failed to allocate memory for response data");
-            exit(EXIT_FAILURE);
-        }
+        char res_data[SERVER_RESPONSE_DATA_LENGTH] = {0};
         render_html(res_data, method, path, files);
         strcat(response, res_data);
-        free(res_data);
     }
-    // fprintf(stderr, "response:\n%s\n", response);
     if (send(client_socket, response, SERVER_RESPONSE_LENGTH, 0) < 0) {
         perror("failed to send http header to client");
         exit(EXIT_FAILURE);
     }
-    free(response);
     fclose(client_file);
 }
 
@@ -133,13 +124,16 @@ void render_index(char *res_data, file_arr *files) {
     index_ft_buff[ift_size] = '\0';
     // fprintf(stderr, "foot: %s\n", index_ft_buff);
     strcat(res_data, index_hd_buff);
+    char *open_tag_hd = "<li class=\"file\"><a href=\"";
+    char *open_tag_tl = "\">";
+    char *delete_button = "</a><a href=\"/delete?filename=";
+    char *close_tag = "\"><button>delete</button></a></li>";
     for (int i = 0; i < files->num_files; i++) {
-        char *open_tag_hd = "<li><a href=\"";
-        char *open_tag_tl = "\">";
-        char *close_tag = "</a></li>";
         strcat(res_data, open_tag_hd);
         strcat(res_data, files->files[i]);
         strcat(res_data, open_tag_tl);
+        strcat(res_data, files->files[i]);
+        strcat(res_data, delete_button);
         strcat(res_data, files->files[i]);
         strcat(res_data, close_tag);
     }
